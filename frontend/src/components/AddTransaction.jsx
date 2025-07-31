@@ -4,20 +4,28 @@ import { GlobalContext } from '../context/GlobalState';
 const AddTransaction = () => {
   const { addTransaction } = useContext(GlobalContext);
 
-  // For income
+  // Income
   const [incomeText, setIncomeText] = useState('');
   const [incomeAmount, setIncomeAmount] = useState('');
 
-  // For expense
+  // Expense
   const [expenseText, setExpenseText] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
 
   const submitIncome = (e) => {
     e.preventDefault();
+
+    const processedAmount = Math.abs(incomeAmount);
+    if (processedAmount < 0) {
+      alert("Amount too low. Cannot deduct ₹17 from this income.");
+      return;
+    }
+
     addTransaction({
       text: incomeText,
-      amount: +Math.abs(incomeAmount)
+      amount: +processedAmount,
     });
+
     setIncomeText('');
     setIncomeAmount('');
   };
@@ -26,15 +34,16 @@ const AddTransaction = () => {
     e.preventDefault();
     addTransaction({
       text: expenseText,
-      amount: -Math.abs(expenseAmount)
+      amount: -Math.abs(expenseAmount),
     });
+
     setExpenseText('');
     setExpenseAmount('');
   };
 
   return (
-    <div>
-      <h3>Add Income</h3>
+    <div className="form-section">
+      <h2 className="section-title">➕ Add Income</h2>
       <form onSubmit={submitIncome}>
         <div className="form-control">
           <label>Description</label>
@@ -47,19 +56,19 @@ const AddTransaction = () => {
           />
         </div>
         <div className="form-control">
-          <label>Amount</label>
+          <label>Amount (₹)</label>
           <input
             type="number"
             value={incomeAmount}
             onChange={(e) => setIncomeAmount(e.target.value)}
-            placeholder="e.g. 5000"
+            placeholder="e.g. 50000"
             required
           />
         </div>
-        <button className="btn">Add Income</button>
+        <button className="btn income-btn">Add Income</button>
       </form>
 
-      <h3>Add Expense</h3>
+      <h2 className="section-title">➖ Add Expense</h2>
       <form onSubmit={submitExpense}>
         <div className="form-control">
           <label>Description</label>
@@ -72,7 +81,7 @@ const AddTransaction = () => {
           />
         </div>
         <div className="form-control">
-          <label>Amount</label>
+          <label>Amount (₹)</label>
           <input
             type="number"
             value={expenseAmount}
@@ -81,7 +90,7 @@ const AddTransaction = () => {
             required
           />
         </div>
-        <button className="btn">Add Expense</button>
+        <button className="btn expense-btn">Add Expense</button>
       </form>
     </div>
   );
