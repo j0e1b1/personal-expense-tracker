@@ -7,10 +7,12 @@ const AddTransaction = () => {
   // Income
   const [incomeText, setIncomeText] = useState('');
   const [incomeAmount, setIncomeAmount] = useState('');
+  const [incomeDate, setIncomeDate] = useState('');
 
   // Expense
-  const [expenseText, setExpenseText] = useState('');
+  const [expenseCategory, setExpenseCategory] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
+  const [expenseDate, setExpenseDate] = useState('');
 
   const submitIncome = (e) => {
     e.preventDefault();
@@ -24,21 +26,28 @@ const AddTransaction = () => {
     addTransaction({
       text: incomeText,
       amount: +processedAmount,
+      date: incomeDate,
+      type: 'income'
     });
 
     setIncomeText('');
     setIncomeAmount('');
+    setIncomeDate('');
   };
 
   const submitExpense = (e) => {
     e.preventDefault();
+
     addTransaction({
-      text: expenseText,
+      text: expenseCategory,
       amount: -Math.abs(expenseAmount),
+      date: expenseDate,
+      type: 'expense'
     });
 
-    setExpenseText('');
+    setExpenseCategory('');
     setExpenseAmount('');
+    setExpenseDate('');
   };
 
   return (
@@ -65,20 +74,29 @@ const AddTransaction = () => {
             required
           />
         </div>
+
         <button className="btn income-btn">Add Income</button>
       </form>
 
       <h2 className="section-title">➖ Add Expense</h2>
       <form onSubmit={submitExpense}>
         <div className="form-control">
-          <label>Description</label>
-          <input
-            type="text"
-            value={expenseText}
-            onChange={(e) => setExpenseText(e.target.value)}
-            placeholder="e.g. Rent"
+          <label>Category</label>
+          <select
+            value={expenseCategory}
+            onChange={(e) => setExpenseCategory(e.target.value)}
             required
-          />
+          >
+            <option value="">Select Category</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Rent">Rent</option>
+            <option value="Others">Others</option>
+          </select>
         </div>
         <div className="form-control">
           <label>Amount (₹)</label>
@@ -87,6 +105,15 @@ const AddTransaction = () => {
             value={expenseAmount}
             onChange={(e) => setExpenseAmount(e.target.value)}
             placeholder="e.g. 1500"
+            required
+          />
+        </div>
+        <div className="form-control">
+          <label>Date</label>
+          <input
+            type="date"
+            value={expenseDate}
+            onChange={(e) => setExpenseDate(e.target.value)}
             required
           />
         </div>

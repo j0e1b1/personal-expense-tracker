@@ -97,15 +97,6 @@ const Dashboard = () => {
           }}
         />
       </div>
-
-
-
-      <div style={{ textAlign: 'center', marginTop: 40 }}>
-        <h4>🚨 Peak Spending Day</h4>
-        <p style={{ fontSize: '18px', color: '#ef4444' }}>
-          {peakDate[0]} — ₹{peakDate[1].toFixed(2)}
-        </p>
-      </div>
     </div>
   );
 };
