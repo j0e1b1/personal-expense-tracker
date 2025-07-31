@@ -14,6 +14,10 @@ const Budgets = () => {
         fetchBudgetsAndSummary();
     }, []);
 
+    useEffect(() => {
+        checkBudgetLimits();
+    }, [budgetSummary]);
+
     const fetchBudgetsAndSummary = async () => {
         setLoading(true);
         setError('');
@@ -29,6 +33,29 @@ const Budgets = () => {
             setError('Failed to load budget data. Please try again.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const checkBudgetLimits = () => {
+        const totalBudget = budgetSummary.reduce((sum, budget) => sum + budget.amount, 0);
+        const totalLimit = budgetSummary.reduce((sum, budget) => sum + budget.limit, 0);
+
+        if (totalLimit > 0) {
+            const percentageUsed = (totalBudget / totalLimit) * 100;
+
+            if (percentageUsed > 100) {
+                window.alert(`
+                    %cBudget Limit Exceeded!
+                    You have exceeded 100% of your budget limit.`,
+                    "background: white; color: red; font-weight: bold;"
+                );
+            } else if (percentageUsed > 80) {
+                window.alert(`
+                    %cBudget Warning!
+                    You have used more than 80% of your budget limit.`,
+                    "background: white; color: yellow; font-weight: bold;"
+                );
+            }
         }
     };
 
