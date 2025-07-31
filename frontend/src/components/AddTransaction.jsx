@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 
 const AddTransaction = () => {
-  const { addTransaction } = useContext(GlobalContext);
+  const { addTransaction, budget, transactions } = useContext(GlobalContext);
 
   // Income
   const [incomeText, setIncomeText] = useState('');
@@ -36,19 +36,32 @@ const AddTransaction = () => {
   };
 
   const submitExpense = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    addTransaction({
-      text: expenseCategory,
-      amount: -Math.abs(expenseAmount),
-      date: expenseDate,
-      type: 'expense'
-    });
+  const totalExpenses = transactions
+    .filter((t) => t.amount < 0)
+    .reduce((acc, t) => acc + Math.abs(t.amount), 0);
 
-    setExpenseCategory('');
-    setExpenseAmount('');
-    setExpenseDate('');
-  };
+  const newTotalExpenses = totalExpenses + Math.abs(expenseAmount);
+
+  if (newTotalExpenses > budget) {
+    window.alert('⚠️ Expenses have exceeded 100% of your budget!');
+    return; // Prevent adding the expense
+  } else if (newTotalExpenses > budget * 0.8) {
+    window.alert('⚠️ You have exceeded 80% of your budget!');
+  }
+
+  addTransaction({
+    text: expenseCategory,
+    amount: -Math.abs(expenseAmount),
+    date: expenseDate,
+    type: 'expense'
+  });
+
+  setExpenseCategory('');
+  setExpenseAmount('');
+  setExpenseDate('');
+};
 
   return (
     <div className="form-section">
