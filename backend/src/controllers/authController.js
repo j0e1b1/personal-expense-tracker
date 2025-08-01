@@ -5,7 +5,7 @@ const { jwtSecret, jwtExpiresIn } = require('../config/jwt');
 
 const generateToken = (id) => {
     return jwt.sign({ id }, jwtSecret, {
-        expiresIn: jwtExpiresIn, 
+        expiresIn: jwtExpiresIn,
     });
 };
 
