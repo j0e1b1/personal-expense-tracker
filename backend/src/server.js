@@ -1,5 +1,4 @@
 
-
 require('dotenv').config();
 
 const express = require('express');
@@ -8,6 +7,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const budgetRoutes = require('./routes/budgetRoutes');
+
 
 const app = express();
 
